@@ -4,6 +4,8 @@ import {CarouselTransition} from "../components/CarouselTransition";
 import PostCard from "../components/PostCard";
 
 const Main = () => {
+
+
     return (
         <div className="flex flex-col  min-h-screen max-w-lg mx-auto bg-gray-100 pt-14 space-y-1">
             <Header />
