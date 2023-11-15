@@ -22,9 +22,12 @@ const Header = () => {
     )
 
     const onLoginText = (
-        <div>
+        <div className="flex space-x-5">
+            <div>
+                {nickname}
+            </div>
             <div onClick={logOut}>
-                {nickname} 로그아웃
+                로그아웃
             </div>
         </div>
     )
