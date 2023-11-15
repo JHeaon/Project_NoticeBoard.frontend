@@ -54,12 +54,16 @@ export function SignUp() {
     });
   }
 
+
+  // #FIXME: 이메일 중복확인 로직 재대로 확인하기
   const checkEmailHandler = () => {
     axios.post("http://localhost:8000/account/email_check/", {
       "email": email,
     }).then(res => {
       console.log(res.data);
       if(res.data['message'] === '사용 가능한 이메일입니다.'){
+        setIdErrormsg(res.data['message']);
+      } else {
         setIdErrormsg(res.data['message']);
       }
     }).catch((err) => {
@@ -84,9 +88,9 @@ export function SignUp() {
                 <div>
                   <label htmlFor="email" className="block text-xl font-medium leading-6 text-gray-900">Email</label>
                   <div className="flex justify-between w-full space-x-5 ">
-                    <input id="email" value={email} name="email" onChange={onEmailHandler} type="email" autoComplete="email" required className=" w-full rounded-md border-0 text-gray-900 text-xl shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" />
-                    <button type="button" onClick={checkEmailHandler} className="rounded-md text-center bg-gray-400 px-8 text-white shadow-sm">
-                      중복
+                    <input id="email" value={email} name="email" onChange={onEmailHandler} type="email" autoComplete="email" required className="w-full px-2 rounded-md border-0 text-gray-900 text-xl shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" />
+                    <button type="button" onClick={checkEmailHandler} className="rounded-md text-center text-lg bg-gray-400 px-8 py-1.5 text-white shadow-sm">
+                      check
                     </button>
                   </div>
                 </div>
@@ -116,7 +120,7 @@ export function SignUp() {
 
                 <div>
                   <div className="flex items-center justify-between">
-                    <label htmlFor="Repassword" className="block text-xl font-medium leading-6 text-gray-900">Repassword</label>
+                    <label htmlFor="Repassword" className="block text-xl font-medium leading-6 text-gray-900">password 확인 </label>
                     <div className="text-sm">
                     </div>
                   </div>
