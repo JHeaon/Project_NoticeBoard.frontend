@@ -3,7 +3,6 @@ import WeMe from '../asset/svg/WeMe.svg';
 import Backbutton from '../asset/svg/Backbutton.svg';
 import {useState} from "react";
 import axios from "axios";
-import {setIndicator} from "@material-tailwind/react/components/Tabs/TabsContext";
 
 export function Login() {
 
@@ -22,7 +21,6 @@ export function Login() {
   function submitHandler(event) {
     event.preventDefault();
 
-
     axios.post("http://localhost:8000/account/login/", {
       "email": email,
       "password": password
@@ -34,23 +32,6 @@ export function Login() {
     }).catch((err) => {
         setErrormsg('아이디 또는 비밀번호가 일치하지 않습니다.');
     });
-
-   // axios.get("http://localhost:8000/account/user/", {
-   //     headers: {
-   //         "Content-Type": "application/json",
-   //         "Authorization": `JWT ${localStorage.getItem('token')}`,
-   //     }
-   // })
-   //     .then(res => {
-   //          console.log(res.data);
-   //          console.log(localStorage.getItem('token'));
-   //     }).catch()
-
-
-
-    console.log(email);
-    console.log(password);
-
   }
 
   return (
@@ -62,7 +43,7 @@ export function Login() {
               </Link>
 
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-              <img className="mx-auto h-10 w-auto" src={WeMe} />
+              <img className="mx-auto h-10 w-auto" src={WeMe} alt="WeMe"/>
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -92,9 +73,15 @@ export function Login() {
                 </div>
               </form>
 
-              <p className="mt-10 text-center text-sm text-gray-500">
-                Forgot password?
-              </p>
+                <div className='flex justify-center space-x-10'>
+                    <p className="mt-10 text-center text-lg text-gray-500">
+                        Forgot password?
+                    </p>
+                    <Link to={'/signup'} className="mt-10 text-center text-lg text-gray-500">
+                        Sign up
+                    </Link>
+                </div>
+
             </div>
           </div>
         </div>
