@@ -1,14 +1,19 @@
 import WeMe from '../asset/svg/WeMe.svg';
 import { Link } from 'react-router-dom';
 import {useEffect, useState} from "react";
-import isLogin from "../functions/isLogin";
+import isLogin from "../functions/IsLogin";
 import {jwtDecode} from "jwt-decode";
 import axios from "axios";
-import env from "../functions/env";
+import env from "../functions/Env";
 
 
 const Header = () => {
     const [nickname, setNickname] = useState()
+
+    const logOut = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
 
     const offLoginText = (
         <Link to={'/login'} className="text-gray-400 hover:text-gray-500">
@@ -16,17 +21,16 @@ const Header = () => {
         </Link>
     )
 
-    // Todo: 로그아웃 기능 구현
     const onLoginText = (
         <div>
-            <div>
-                {nickname}님, 로그아웃
+            <div onClick={logOut}>
+                {nickname} 로그아웃
             </div>
         </div>
     )
 
     const getUserNickName = () => {
-                if (isLogin()) {
+        if (isLogin()) {
             const userId = jwtDecode(localStorage.getItem('token'))['user_id'];
             axios.get(`${env.API_URL}/account/user/${userId}`, {
                 headers: {
@@ -35,6 +39,8 @@ const Header = () => {
                 }
             }).then(res => {
                 setNickname(res.data['nickname']);
+            }).catch((err) => {
+                localStorage.removeItem('token');
             });
         }
     }
