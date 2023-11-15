@@ -20,7 +20,7 @@ const Header = () => {
     const onLoginText = (
         <div>
             <div>
-                {nickname} 로그아웃
+                {nickname}님, 로그아웃
             </div>
         </div>
     )
