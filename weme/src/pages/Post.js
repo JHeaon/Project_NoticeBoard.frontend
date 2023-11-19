@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import axios from "axios";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {jwtDecode} from "jwt-decode";
 
 function Post (){
 
@@ -9,13 +10,16 @@ function Post (){
     const [recruite, setRecruite] = useState();
     const [status, setStatus] = useState('온라인');
     const [duration, setDuration] = useState('1개월');
-    const [tech, setTech] = useState();
     const [deadline, setDeadline] = useState();
-    const [position, setPosition] = useState();
     const [kakao, setKakao] = useState();
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
+    const [errormsg, setErrormsg] = useState('');
+    const [choicePosition, setChoicePosition] = useState()
+    const [choiceTech, setChoiceTech] = useState()
 
+    const [position, setPosition] = useState();
+    const [tech, setTech] = useState();
     // Handler 정의
     const onKindHandler = (event) => {
         setKind(event.currentTarget.value);
@@ -33,16 +37,16 @@ function Post (){
         setDuration(event.currentTarget.value);
     }
 
-    const onTechHandler = (event) => {
-        setTech(event.currentTarget.value);
+    const onChoiceTechHandler = (event) => {
+        setChoiceTech(event.currentTarget.value);
     }
 
     const onDeadlineHandler = (event) => {
         setDeadline(event.currentTarget.value);
     }
 
-    const onPositionHandler = (event) => {
-        setPosition(event.currentTarget.value);
+    const onChoicePositionHandler = (event) => {
+        setChoicePosition(event.currentTarget.value);
     }
 
     const onKakaoHandler = (event) => {
@@ -57,16 +61,83 @@ function Post (){
         setContent(event.currentTarget.value);
     }
 
+    const techList = () => {
+        return (
+            <select value={choiceTech} className='p-2' onChange={onChoiceTechHandler}>
+                <option selected disabled> 기술 선택 </option>
+                {tech.map((tech) => {
+                    return (
+                        <option key={tech['id']}>{tech['name']}</option>
+                    );
+                })}
+            </select>
+        )
+    }
+
+    const positionList = () => {
+        return (
+            <select value={choicePosition} className='p-2' onChange={onChoicePositionHandler}>
+                <option selected disabled> 포지션 선택 </option>
+                {position.map((tech) => {
+                    return (
+                        <option key={tech['id']}>{tech['name']}</option>
+                    );
+                })}
+            </select>
+        )
+    }
+
     const submitHandler = (e) => {
         e.preventDefault();
 
-        console.log(kind)
-        console.log(recruite)
-        console.log(status)
+        const techDict = {
+            '파이썬' : 1,
+            'C' : 2,
+            'C#' : 3,
+        }
+
+        const positionDict = {
+            '백엔드' : 1,
+            '프론트엔드': 2,
+        }
+
+
+        console.log(jwtDecode(localStorage.getItem('token'))['user_id'], kind, recruite, status, duration, techDict[choiceTech], deadline, positionDict[choicePosition], kakao, title, content)
+
+
+        axios.post("http://localhost:8000/api/post/", {
+            "recruite": recruite,
+            "kind": kind,
+            "status": status,
+            "duration": duration,
+            "deadline": deadline,
+            "kakao": kakao,
+            "title": title,
+            "content": content,
+            "author": jwtDecode(localStorage.getItem('token'))['user_id'],
+            "position": [positionDict[choicePosition]],
+            "techstack": [techDict[choiceTech]],
+        }, {
+        }).then(res => {
+            console.log(res.data);
+            window.location.href = '/';
+        }).catch((err) => {
+            console.log(err);
+        })
 
 
         // window.location.href = '/';
     }
+
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/techstack/", {}).then(res => {
+            setTech(res.data['results']);
+        })
+
+        axios.get("http://localhost:8000/api/position/", {}).then(res => {
+            setPosition(res.data['results']);
+        })
+    }, []);
 
     return (
         <div>
@@ -110,8 +181,8 @@ function Post (){
                     </div>
 
                     <div className="flex flex-col space-y-2">
-                        <label> 사용하는 기술 스택 </label>
-                        <input type='text' className="p-2" />
+                        <label> 사용하는 주요 기술 스택 </label>
+                        {!!tech ? techList() : ''}
                     </div>
 
                     <div className="flex flex-col space-y-2">
@@ -121,12 +192,12 @@ function Post (){
 
                     <div className="flex flex-col space-y-2">
                         <label> 모집 포지션 </label>
-                        <input type='text' className="p-2" />
+                        {!!position ? positionList() : ''}
                     </div>
 
                     <div className="flex flex-col space-y-2">
                         <label> 카카오톡 오픈채팅 </label>
-                        <input type='text' value={kakao || ""} onChange={onKakaoHandler} className="p-2" />
+                        <input type='text' value={kakao || ""} onChange={onKakaoHandler} className="p-2" placeholder="오픈채팅방 주소를 입력해 주세요."/>
                     </div>
 
                     <div className="text-3xl pt-5"> 프로젝트에 대해 소개해주세요. </div>
@@ -140,6 +211,8 @@ function Post (){
                         <label> 내용 </label>
                         <textarea value={content || ""} onChange={onContentHandler} className="p-2 h-40" />
                     </div>
+
+                    <div>{errormsg}</div>
 
                     <input type='submit' value='모집하기' className="bg-blue-500 text-center py-5 hover:bg-blue-700 text-white font-bold px-4 rounded" />
                 </form>

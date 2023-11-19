@@ -35,7 +35,7 @@ export function Login() {
   }
 
   return (
-      <di>
+      <div>
         <div>
           <div className="flex pt-20 min-h-screen bg-gray-100 flex-col px-6 py-12 lg:px-8">
               <Link to={'/'} className="sm:mx-auto sm:w-full sm:max-w-sm pb-24">
@@ -87,7 +87,7 @@ export function Login() {
         </div>
 
 
-      </di>
+      </div>
   );
 }
 

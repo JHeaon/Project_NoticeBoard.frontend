@@ -15,6 +15,10 @@ const Header = () => {
         window.location.href = '/';
     }
 
+    const Home = () => {
+        window.location.href = '/';
+    }
+
     const offLoginText = (
         <Link to={'/login'} className="text-gray-400 hover:text-gray-500">
             로그인
@@ -57,7 +61,7 @@ const Header = () => {
     return(
         <div className="flex justify-between rounded-sm  w-full p-4">
             <div>
-                <img src={WeMe} alt="WeMe" className="w-20"/>
+                <img src={WeMe} alt="WeMe" className="w-20" onClick={Home}/>
             </div>
             {isLogin() ? (onLoginText) : (offLoginText)}
         </div>
