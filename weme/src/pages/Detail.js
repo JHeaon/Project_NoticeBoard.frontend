@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import env from "../functions/Env";
 
 const Detail = (props) => {
     const [postData, setPostData] = useState()
@@ -20,10 +21,9 @@ const Detail = (props) => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/post/${id}/`, {})
+        axios.get(`${env.API_URL}/api/post/${id}/`, {})
             .then(res => {
                 setPostData(res.data);
-                console.log(res.data)
             })
             .catch()
 
@@ -36,7 +36,7 @@ const Detail = (props) => {
                 {!!postData?
                     <div className="flex flex-col justify-between text-3xl text-left px-6 pt-6">
                         <div className = "text-center border-b-2 border-gray-500 p-4 w-full"> {postData.title} </div>
-                        <div className = "grid grid-cols-2 gap-x-4 gap-y-6 px-4 pb-8 py-10 border-b-2 border-gray-500 border-2 mt-4 rounded-2xl">
+                        <div className = "grid grid-cols-2 gap-x-4 gap-y-6 px-4 pb-8 py-10 border-b-2 border-gray-500 border-2 mt-4 rounded-2xl text-xl">
                             <div>모집 구분 : {postData.kind}</div>
                             <div>진행 방식 : {postData.status}</div>
                             <div>모집 인원 : {postData.recruit}</div>

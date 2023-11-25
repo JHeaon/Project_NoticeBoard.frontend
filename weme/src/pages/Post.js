@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
+import env from "../functions/Env";
 
 function Post (){
 
@@ -105,7 +106,7 @@ function Post (){
         console.log(jwtDecode(localStorage.getItem('token'))['user_id'], kind, recruite, status, duration, techDict[choiceTech], deadline, positionDict[choicePosition], kakao, title, content)
 
 
-        axios.post("http://localhost:8000/api/post/", {
+        axios.post(`${env.API_URL}/api/post/`, {
             "recruite": recruite,
             "kind": kind,
             "status": status,
@@ -130,11 +131,11 @@ function Post (){
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/techstack/", {}).then(res => {
+        axios.get(`${env.API_URL}/api/techstack/`, {}).then(res => {
             setTech(res.data['results']);
         })
 
-        axios.get("http://localhost:8000/api/position/", {}).then(res => {
+        axios.get(`${env.API_URL}/api/position/`, {}).then(res => {
             setPosition(res.data['results']);
         })
     }, []);

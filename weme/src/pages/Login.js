@@ -3,6 +3,7 @@ import WeMe from '../asset/svg/WeMe.svg';
 import Backbutton from '../asset/svg/Backbutton.svg';
 import {useState} from "react";
 import axios from "axios";
+import env from "../functions/Env";
 
 export function Login() {
 
@@ -21,7 +22,7 @@ export function Login() {
   function submitHandler(event) {
     event.preventDefault();
 
-    axios.post("http://localhost:8000/account/login/", {
+    axios.post(`${env.API_URL}/account/login/`, {
       "email": email,
       "password": password
     }).then(res => {

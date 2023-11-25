@@ -3,6 +3,7 @@ import WeMe from '../asset/svg/WeMe.svg';
 import Backbutton from '../asset/svg/Backbutton.svg';
 import {useState} from "react";
 import axios from "axios";
+import env from "../functions/Env";
 
 export function SignUp() {
 
@@ -41,7 +42,7 @@ export function SignUp() {
         return;
     }
 
-    axios.post("http://localhost:8000/account/signup/", {
+    axios.post(`${env.API_URL}/account/signup/`, {
       "email": email,
       "nickname": nickname,
       "password": password,
@@ -57,7 +58,7 @@ export function SignUp() {
 
   // #FIXME: 이메일 중복확인 로직 재대로 확인하기
   const checkEmailHandler = () => {
-    axios.post("http://localhost:8000/account/email_check/", {
+    axios.post(`${env.API_URL}/account/email_check/`, {
       "email": email,
     }).then(res => {
       console.log(res.data);

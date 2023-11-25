@@ -12,13 +12,17 @@ const Main = () => {
     const [postData, setPostData] = useState()
 
 
-    useEffect(() => {
-        axios.get(`${env.API_URL}/api/post/`, {})
+    const getData = () => {
+        axios.get(`${env.API_URL}/api/post/`, {
+        })
             .then(res => {
                 setPostData(res.data);
             })
             .catch()
+    }
 
+    useEffect(() => {
+        getData()
     }, []);
 
 
@@ -29,11 +33,8 @@ const Main = () => {
                 <Header />
                 <CarouselTransition />
                 <div className="flex justify-between text-3xl text-left px-6 pt-6">
-
                     <div>🔥 이번주 인기 모집글</div>
-
                 </div>
-
                 {postData ? <HotPostCard hotpostcards={postData}/> : ''}
 
 
@@ -50,7 +51,6 @@ const Main = () => {
                     </div>
 
                     {postData ? <PostCard postcards={postData}/> : ''}
-
                 </div>
             </div>
         </div>
